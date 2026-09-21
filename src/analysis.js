@@ -2,6 +2,7 @@
   const CURRENT_ALIASES = {
     active: ['activo', 'active'],
     role: ['rol', 'role'],
+    category: ['categoria ntt data', 'categoría ntt data', 'categoria', 'categoría'],
     family: ['familia', 'family'],
     strategyLine: ['linea estrategica', 'línea estratégica', 'linea', 'linea de ejecucion'],
     group: ['group', 'grupo'],
@@ -316,6 +317,9 @@
     if (!fieldMap.family) {
       warnings.push('No se ha detectado la columna Familia.');
     }
+    if (!fieldMap.category) {
+      warnings.push('No se ha detectado la columna Categoría NTT DATA; la pirámide usará "Sin categoría".');
+    }
     if (!projectKeys.length) {
       warnings.push(
         'No se han detectado columnas P1/P2/P3/P4; se asumirá 100% de dedicación para los recursos activos.',
@@ -325,6 +329,8 @@
     const members = rows.map((row, index) => {
       const active = fieldMap.active ? parseBoolean(row[fieldMap.active]) : true;
       const role = String(row[fieldMap.role] || 'Sin rol').trim() || 'Sin rol';
+      const category =
+        String(row[fieldMap.category] || '').trim() || 'Sin categoría';
       const family = normalizeFamily(fieldMap.family ? row[fieldMap.family] : 'Sin familia');
       const group = String(row[fieldMap.group] || '').trim();
       const strategyLine = String(row[fieldMap.strategyLine] || '').trim();
@@ -359,6 +365,7 @@
       return {
         active,
         role,
+        category,
         family,
         group,
         strategyLine,
@@ -425,7 +432,7 @@
 
     const pyramidByFamily = activeMembers.reduce((map, member) => {
       const familyKey = member.family;
-      const roleKey = member.role;
+      const roleKey = member.category;
       const familyEntry = map.get(familyKey) || new Map();
       familyEntry.set(roleKey, (familyEntry.get(roleKey) || 0) + 1);
       map.set(familyKey, familyEntry);
@@ -445,7 +452,7 @@
           family,
           Array.from(roles.entries())
             .map(([role, count]) => ({ role, count }))
-            .sort((left, right) => sortRoles(left.role, right.role)),
+            .sort((left, right) => left.role.localeCompare(right.role, 'es')),
         ]),
       ),
     };

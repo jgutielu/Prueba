@@ -14,7 +14,8 @@ La app analiza:
 - importes y porcentajes por rol, con detalle por click
 - impacto en rentabilidad del decalaje de productividad para `Funcional -
   Escuela`
-- pirámides de equipo para Tributos y Sanciones
+- pirámides de equipo para Tributos y Sanciones usando la columna
+  `Categoría NTT DATA`
 - coste, ingreso y margen por proyecto desde la pestaña `Detalle`
 
 ## Testing

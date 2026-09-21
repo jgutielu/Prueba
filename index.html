@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analizador de dedicación IT</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Gestión de servicios IT</p>
+        <h1>Analizador de equipo y rentabilidad</h1>
+        <p class="subtitle">
+          Carga el Excel base para revisar dedicación, coste, rentabilidad e
+          indicadores por rol y familia.
+        </p>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="panel controls">
+        <h2>Entrada</h2>
+        <label class="field">
+          <span>Excel de trabajo</span>
+          <input id="workbookInput" type="file" accept=".xlsx,.xls" />
+        </label>
+
+        <h2>Supuestos</h2>
+        <label class="field">
+          <span>Meses para llegar al 100% (Funcional - Escuela)</span>
+          <input id="rampMonths" type="number" min="1" step="1" value="6" />
+        </label>
+        <label class="field">
+          <span>Mes por defecto si no existe antigüedad</span>
+          <input
+            id="defaultRampMonth"
+            type="number"
+            min="1"
+            step="1"
+            value="1"
+          />
+        </label>
+
+        <section class="helper">
+          <h2>Formato esperado</h2>
+          <ul>
+            <li>Pestaña principal tipo <strong>Mes actual</strong>.</li>
+            <li>Pestaña secundaria tipo <strong>Detalle</strong>.</li>
+            <li>
+              Campos esperados: Activo, Rol, Familia, Línea estratégica, Group,
+              CSR, P1/P2/P3/P4.
+            </li>
+            <li>
+              Si existe antigüedad o fecha de incorporación, se usa para la
+              rampa de productividad.
+            </li>
+          </ul>
+        </section>
+      </aside>
+
+      <section class="content">
+        <section class="panel" id="statusPanel">
+          <h2>Estado</h2>
+          <p id="statusMessage">
+            Selecciona un Excel para cargar el análisis.
+          </p>
+          <ul id="warningList" class="warnings"></ul>
+        </section>
+
+        <section class="grid">
+          <article class="panel">
+            <h2>Resumen general</h2>
+            <div id="summaryCards" class="cards empty-state">
+              <p>Sin datos cargados.</p>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h2>Rentabilidad de la cuenta</h2>
+            <div id="profitabilityCards" class="cards empty-state">
+              <p>Sin datos cargados.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel">
+          <h2>Importes por rol</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rol</th>
+                  <th>Personas</th>
+                  <th>Importe</th>
+                  <th>% del total</th>
+                  <th>Detalle</th>
+                </tr>
+              </thead>
+              <tbody id="roleTableBody">
+                <tr>
+                  <td colspan="5" class="muted">Sin datos cargados.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-header">
+            <h2>Detalle por rol</h2>
+            <p id="selectedRoleLabel" class="muted">
+              Selecciona un rol en la tabla anterior.
+            </p>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Persona</th>
+                  <th>Familia</th>
+                  <th>Group</th>
+                  <th>CSR</th>
+                  <th>% dedicación</th>
+                  <th>Coste imputado</th>
+                  <th>Proyectos</th>
+                </tr>
+              </thead>
+              <tbody id="roleDetailBody">
+                <tr>
+                  <td colspan="7" class="muted">Sin detalle seleccionado.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="grid">
+          <article class="panel">
+            <h2>Pirámide Tributos</h2>
+            <div id="tributosPyramid" class="pyramid empty-state">
+              <p>Sin datos cargados.</p>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h2>Pirámide Sanciones</h2>
+            <div id="sancionesPyramid" class="pyramid empty-state">
+              <p>Sin datos cargados.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="panel">
+          <h2>Detalle de proyectos</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Proyecto</th>
+                  <th>Coste</th>
+                  <th>Ingreso</th>
+                  <th>Margen</th>
+                  <th>Margen %</th>
+                </tr>
+              </thead>
+              <tbody id="projectTableBody">
+                <tr>
+                  <td colspan="5" class="muted">Sin datos cargados.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script
+      src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"
+      defer
+    ></script>
+    <script src="./src/analysis.js" defer></script>
+    <script src="./src/app.js" defer></script>
+  </body>
+</html>
